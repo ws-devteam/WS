@@ -1,0 +1,82 @@
+.socialA {
+    text-decoration: none;
+    vertical-align: middle;
+    text-align: center;
+    line-height: 3;
+}
+
+.socialP {
+    color: white;
+    position: relative;
+    left: -10px;
+    font-family: 'Lato';
+    contain: content;
+    margin-top: 1rem;
+}
+
+#sidebar {
+    height: 250px;
+    width: 10px;
+    position: fixed;
+    text-align: right;
+    padding: 10px;
+    margin-left: 10px;
+}
+
+.socialP i {
+    /* left: 30px; */
+    position: relative;
+    vertical-align: middle;
+    text-align: center;
+    font-size: 24px;
+    float: right;
+}
+
+.social {
+    margin-left: -13rem;
+    width: 230px;
+    padding: 0;
+    display: inline-table;
+    height: 0px;
+    background-color: rgba(128, 128, 128, 0.73);
+    -moz-transition-property: margin-left;
+    -moz-transition-duration: 0.2s;
+    -moz-transition-delay: 0.2s;
+    -ms-transition-property: margin-left;
+    -ms-transition-duration: 0.2s;
+    -ms-transition-delay: 0.2s;
+    -o-transition-property: margin-left;
+    -o-transition-duration: 0.2s;
+    -o-transition-delay: 0.2s;
+    -webkit-transition-property: margin-left;
+    -webkit-transition-duration: 0.2s;
+    -webkit-transition-delay: 0.2s;
+    box-shadow: 0px 0px 6px 0px #3E3D3D;
+    cursor: pointer;
+}
+
+.social:hover {
+    margin-left: -30px;
+    width: 230px;
+    background-color: #3b5998;
+}
+
+.facebook:hover {
+    background-color: #3b5998;
+}
+
+.whatsapp:hover {
+    background-color: #25D366;
+}
+
+.instagram:hover {
+    background-color: #E1306C;
+}
+
+.youtube:hover {
+    background-color: #E52D27;
+}
+
+.mail:hover {
+    background-color: #E52D27;
+}
