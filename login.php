@@ -149,7 +149,7 @@ if(isset($_SESSION['login'])){
                 data: $(this).serialize() + "&functionname=" + fname,
                 success: function(result) {
                     if (result == 1) {
-                        window.location = "home.php";
+                        window.location = "dashboard.php";
                     } else {
                         if (fname == "signin") {
                             $("#signinError").text(result);
