@@ -15,7 +15,9 @@ export const CRUDModes = {
 export const Configure_Contact = [
     { id: 'Name', label: 'Name', objectType: DynamicForm.TextField, required: true },
     { id: 'Location', label: 'Location', objectType: DynamicForm.TextField, required: true },
-    { id: 'Phone', label: 'Phone', objectType: DynamicForm.TextField }
+    { id: 'Phone', label: 'Phone', objectType: DynamicForm.TextField },
+    { id: 'Email', label: 'Email', objectType: DynamicForm.TextField },
+    { id: 'Notes', label: 'Notes', objectType: DynamicForm.TextField }
 ];
 
 export const TransactionForm = [

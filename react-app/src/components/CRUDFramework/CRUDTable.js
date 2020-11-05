@@ -124,15 +124,13 @@ export default class StickyHeadTable extends React.Component {
           onDismiss={this.handleDialogDismiss} onSave={this.handleSave} />
         <Paper>
           <TableContainer className="stickyTableContainer">
+            <Box display="flex" justifyContent="flex-end" p={1} bgcolor="grey.200">
+              <Tooltip title={CRUDModes.Create}>
+                <Button variant="contained" color="primary" onClick={this.handleDialogOpen.bind(this, { mode: CRUDModes.Create })}><Add /></Button>
+              </Tooltip>
+            </Box>
             <Table stickyHeader>
               <TableHead>
-                <TableRow>
-                  <TableCell align="center">
-                    <Tooltip title={CRUDModes.Create}>
-                      <Button variant="contained" color="primary" onClick={this.handleDialogOpen.bind(this, { mode: CRUDModes.Create })}><Add /></Button>
-                    </Tooltip>
-                  </TableCell>
-                </TableRow>
                 <TableRow>
                   <TableCell>Actions</TableCell>
                   {this.props.columns.map((column) => (
