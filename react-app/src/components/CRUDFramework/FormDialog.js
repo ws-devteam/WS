@@ -5,7 +5,7 @@ import {
 } from '@material-ui/core';
 import { Close } from '@material-ui/icons'
 import Skeleton from 'react-loading-skeleton'
-import { DynamicForm, CRUDModes } from '../SharedConstants'
+import { DynamicForm, CRUDModes } from './Config'
 
 const DialogTransition = React.forwardRef(function Transition(props, ref) {
     return <Slide direction="up" ref={ref} {...props} />;

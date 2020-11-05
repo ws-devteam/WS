@@ -12,39 +12,16 @@ export const CRUDModes = {
     Delete: 'Delete',
 }
 
-export const Configure_Warehouse = [
+export const Configure_Contact = [
     { id: 'Name', label: 'Name', objectType: DynamicForm.TextField, required: true },
-    { id: 'Location', label: 'Location', objectType: DynamicForm.TextField },
-    { id: 'Description', label: 'Description', objectType: DynamicForm.TextField }
-];
-
-export const Configure_Item = [
-    { id: 'Name', label: 'Name', objectType: DynamicForm.TextField, required: true },
-    { id: 'Description', label: 'Description', objectType: DynamicForm.TextField }
-];
-
-export const Configure_Vendor = [
-    { id: 'Vendor', label: 'Vendor', objectType: DynamicForm.TextField, required: true },
-    { id: 'Responsible', label: 'Responsible', objectType: DynamicForm.TextField, required: true },
     { id: 'Location', label: 'Location', objectType: DynamicForm.TextField, required: true },
     { id: 'Phone', label: 'Phone', objectType: DynamicForm.TextField }
 ];
 
-export const TransactionsForm = [
-    { id: 'TransactionDate', label: 'Date', objectType: DynamicForm.DateField, required: true },
-    { id: 'TransactionType', label: 'Type', objectType: DynamicForm.SelectField, required: true, dropdownValues: 'Buy;Sell' },
-    { id: 'Warehouse', label: 'Warehouse', objectType: DynamicForm.SelectField, required: true, dropdownValues: ['warehouse', 'Name'] }, //{ Name: 1, _id: 0 }
-    { id: 'Vendor', label: 'Vendor', objectType: DynamicForm.SelectField, required: true, dropdownValues: ['vendor', 'Vendor'] },
-    { id: 'TotalUnits', label: 'Total Units', objectType: DynamicForm.TextField, required: true, inputType: DynamicForm.NumberType },
-    { id: 'Unit', label: 'Unit', objectType: DynamicForm.SelectField, required: true, dropdownValues: 'KG;Piece;Bundle', defaultValue: 'KG' },
-    { id: 'CostPerUnit', label: 'Cost Per Unit', objectType: DynamicForm.TextField, required: true, inputType: DynamicForm.NumberType },
-    { id: 'Item', label: 'Item', objectType: DynamicForm.SelectField, required: true, dropdownValues: ['item', 'Name'] },
-];
-
-export const OtherTransactionsForm = [
+export const TransactionForm = [
     { id: 'TransactionDate', label: 'Date', objectType: DynamicForm.DateField, required: true },
     { id: 'TransactionType', label: 'Type', objectType: DynamicForm.SelectField, required: true, dropdownValues: 'Income;Expenditure' },
-    { id: 'Vendor', label: 'Vendor', objectType: DynamicForm.SelectField, required: true, dropdownValues: ['vendor', 'Vendor'] },
+    { id: 'Name', label: 'Name', objectType: DynamicForm.SelectField, required: true, dropdownValues: ['contact', 'Name'] },
     { id: 'Amount', label: 'Amount', objectType: DynamicForm.TextField, required: true, inputType: DynamicForm.NumberType },
     { id: 'Notes', label: 'Notes', objectType: DynamicForm.TextField, required: true, inputType: DynamicForm.TextField },
 ];

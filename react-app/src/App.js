@@ -1,5 +1,5 @@
 import React from 'react'
-import CRUDTable from "./components/CRUDTable"
+import CRUDTable from "./components/CRUDFramework/CRUDTable"
 
 export class App extends React.Component {
   constructor() {

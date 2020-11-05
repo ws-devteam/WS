@@ -1,12 +1,12 @@
 import React from 'react'
 import {
-  Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, TablePagination, Fab, Zoom, IconButton, Tooltip,
-  Dialog, DialogActions, DialogTitle, DialogContent, Button, DialogContentText, Box, TextField
+  Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, TablePagination, IconButton, Tooltip,
+  Dialog, DialogActions, DialogTitle, DialogContent, Button, DialogContentText, Box, TextField,
 } from '@material-ui/core';
 import { Add, Edit, Delete } from '@material-ui/icons'
 import { Alert } from '@material-ui/lab'
 import FormDialog from './FormDialog'
-import { CRUDModes, DynamicForm } from '../SharedConstants'
+import { CRUDModes, DynamicForm } from './Config'
 import { File } from 'react-kawaii'
 
 export default class StickyHeadTable extends React.Component {
@@ -122,18 +122,17 @@ export default class StickyHeadTable extends React.Component {
 
         <FormDialog trigger={this.state.openCEDialog} formFields={this.props.columns} formData={this.state.formData} mode={this.state.mode}
           onDismiss={this.handleDialogDismiss} onSave={this.handleSave} />
-
-        <div className="fab">
-          <Zoom in={true} unmountOnExit={true} style={{ transitionDelay: '1s' }} >
-            <Tooltip title={CRUDModes.Create}>
-              <Fab color="primary" onClick={this.handleDialogOpen.bind(this, { mode: CRUDModes.Create })}><Add /></Fab>
-            </Tooltip>
-          </Zoom>
-        </div>
         <Paper>
           <TableContainer className="stickyTableContainer">
             <Table stickyHeader>
               <TableHead>
+                <TableRow>
+                  <TableCell align="center">
+                    <Tooltip title={CRUDModes.Create}>
+                      <Button variant="contained" color="primary" onClick={this.handleDialogOpen.bind(this, { mode: CRUDModes.Create })}><Add /></Button>
+                    </Tooltip>
+                  </TableCell>
+                </TableRow>
                 <TableRow>
                   <TableCell>Actions</TableCell>
                   {this.props.columns.map((column) => (
