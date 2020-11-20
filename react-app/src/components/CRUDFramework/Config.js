@@ -1,4 +1,11 @@
 import axios from 'axios'
+export const REST_API = {
+    link: "http://localhost/WS/BL/api.php",
+    methods: {
+        fetchField: "fetchField",
+        read: "read",
+    }
+}
 
 export const DynamicForm = {
     TextField: 'TextField',
@@ -23,7 +30,7 @@ export const Configure_Contact = [
 export const TransactionForm = [
     { id: 'TransactionDate', label: 'Date', objectType: DynamicForm.DateField, required: true },
     { id: 'TransactionType', label: 'Type', objectType: DynamicForm.SelectField, required: true, dropdownValues: 'Income;Expenditure' },
-    { id: 'Name', label: 'Name', objectType: DynamicForm.SelectField, required: true, dropdownValues: ['contact', 'Name'] },
+    { id: 'Name', label: 'Name', objectType: DynamicForm.SelectField, required: true, dropdownValues: ['contacts', 'Name'] },
     { id: 'Amount', label: 'Amount', objectType: DynamicForm.TextField, required: true, inputType: DynamicForm.NumberType },
     { id: 'Notes', label: 'Notes', objectType: DynamicForm.TextField, required: true, inputType: DynamicForm.TextField },
 ];
@@ -58,7 +65,7 @@ export const getDynamicForm = (frmObj) => {
 
 const fillDropdownValues = (dropDownValObj) => {
     return new Promise((resolve, reject) => {
-        axios.post('/invo-api/fetch-field', { collectionParam: dropDownValObj[0], fieldParam: dropDownValObj[1] })
+        axios.post(REST_API.link, { f: REST_API.methods.fetchField, collectionParam: dropDownValObj[0], fieldParam: dropDownValObj[1] })
             .then(resp => {
                 let temp = {}
                 temp = resp.data.map(obj => obj[dropDownValObj[1]])
