@@ -19,9 +19,21 @@ export class App extends React.Component {
     { Label: 'Transactions', Columns: TransactionForm, icon: <AccountBalanceWallet /> },
     { Label: 'Contacts', Columns: Configure_Contact, icon: <AccountCircle /> }
   ]
-  handleCreateDoc() { }
-  handleDeleteDoc() { }
-  handleUpdateDoc() { }
+  handleCreateDoc = (doc) => {
+    axios.post(REST_API.link, { f: REST_API.methods.create, collectionParam: this.state.selectedMenu, formData: doc })
+      .then(resp => this.setState({ rows: resp.data }))
+      .catch(e => console.error(e))
+  }
+  handleUpdateDoc = (docID, doc) => {
+    axios.post(REST_API.link, { f: REST_API.methods.update, collectionParam: this.state.selectedMenu, _id: docID, formData: doc })
+      .then(resp => this.setState({ rows: resp.data }))
+      .catch(e => console.error(e))
+  }
+  handleDeleteDoc = (docID) => {
+    axios.post(REST_API.link, { f: REST_API.methods.delete, collectionParam: this.state.selectedMenu, _id: docID })
+      .then(resp => this.setState({ rows: resp.data }))
+      .catch(e => console.error(e))
+  }
   toggleDrawer = () => {
     this.setState({ drawerOpen: !this.state.drawerOpen })
   }
@@ -35,7 +47,10 @@ export class App extends React.Component {
       .then((resp) => this.fetchedForm = resp)
       .catch(e => console.error(e)))
     promisesList.push(axios.post(REST_API.link, { f: REST_API.methods.read, collectionParam: this.menuConfig[i].Label })
-      .then(resp => this.fetchedRows = resp.data)
+      .then(resp => {
+        this.fetchedRows = resp.data
+        console.log(resp.data)
+      })
       .catch(e => console.error(e)))
     Promise.all(promisesList).then(() => {
       this.setState({

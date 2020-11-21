@@ -3,7 +3,10 @@ export const REST_API = {
     link: "http://localhost/WS/BL/api.php",
     methods: {
         fetchField: "fetchField",
+        create: "create",
         read: "read",
+        update: "update",
+        delete: "delete",
     }
 }
 

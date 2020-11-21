@@ -145,7 +145,7 @@ export default class StickyHeadTable extends React.Component {
               <TableBody>
                 {this.props.rows.slice(this.state.page * this.state.rowsPerPage, this.state.page * this.state.rowsPerPage + this.state.rowsPerPage).map((row) => {
                   return (
-                    <TableRow hover tabIndex={-1} key={row.id}>
+                    <TableRow hover tabIndex={-1}>
                       <TableCell>
                         <Tooltip title={CRUDModes.Update}>
                           <IconButton onClick={this.handleDialogOpen.bind(this, { mode: CRUDModes.Update, id: row._id, rowData: row })}>
@@ -153,7 +153,7 @@ export default class StickyHeadTable extends React.Component {
                           </IconButton>
                         </Tooltip>
                         <Tooltip title={CRUDModes.Delete}>
-                          <IconButton onClick={this.handleDialogOpen.bind(this, { mode: CRUDModes.Delete, id: row._id, name: (row._id).slice(-4) })}>
+                          <IconButton onClick={this.handleDialogOpen.bind(this, { mode: CRUDModes.Delete, id: row._id, name: row._id })}>
                             <Delete fontSize="small" />
                           </IconButton>
                         </Tooltip>

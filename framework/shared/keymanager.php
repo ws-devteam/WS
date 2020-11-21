@@ -8,5 +8,4 @@ class KeyManager
 class API_KeyManager
 {
     public static $_fetchField = "fetchField";
-    public static $_read = "read";
 }
