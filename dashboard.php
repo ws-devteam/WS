@@ -19,7 +19,7 @@ if (!isset($_SESSION['login'])) {
     <!-- The above 4 meta tags *must* come first in the head; any other head content must come *after* these tags -->
 
     <!-- Title  -->
-    <title>Wedding Stories | Home</title>
+    <title>Wedding Stories | Dashboard</title>
 
     <!-- Favicon  -->
     <link rel="icon" href="img/core-img/favicon.ico">
@@ -37,29 +37,6 @@ if (!isset($_SESSION['login'])) {
 <body>
     <!-- Preloader -->
     <?php require_once("components/preloader.php"); ?>
-    <!-- Gradient Background Overlay -->
-    <div class="gradient-background-overlay"></div>
-
-    <!-- Header Area Start -->
-    <header class="header-area bg-img" style="background-image: url(img/bg-img/14.jpg);">
-        <?php require_once("components/header.php"); ?>
-    </header>
-    <!-- Header Area End -->
-
-
-    <section class="mt-100">
-        <div class="d-flex align-items-center justify-content-center">
-            <div class="card" style="width:40rem">
-                <div class="card-body">
-                    <div class="border border-light p-5">
-                        Logged In
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-
 
     <!-- Footer Area Start -->
     <?php require_once("components/footer.php"); ?>

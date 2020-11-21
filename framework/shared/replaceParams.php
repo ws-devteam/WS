@@ -16,3 +16,10 @@ class ReplaceParams
     public static $_Link = "Link";
     public static $_Template = "Template";
 }
+class API_ReplaceParams
+{
+    public static $_collectionParam = "collectionParam";
+    public static $_fieldParam = "fieldParam";
+    public static $_formData = "formData";
+    public static $_id = "_id";
+}

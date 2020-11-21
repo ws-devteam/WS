@@ -28,7 +28,7 @@ function signup($FirstName, $LastName, $SignupEmail, $SignupPassword, $Phone)
     } else {
         $_SESSION["login"] = 1;
         require_once("sender.php");
-        performMail("newUserMail", $FirstName." ".$LastName, $SignupEmail);
+        performMail("newUserMail", $FirstName . " " . $LastName, $SignupEmail);
         return 1;
     };
 }
@@ -38,7 +38,8 @@ function signin($SigninEmail, $SigninPassword)
     $SumanX = new SumanFramework();
     $SQLParams = $SumanX->prepareParamsbyArgs(ReplaceParams::$_Email, $SigninEmail, ReplaceParams::$_Password, $SigninPassword);
     $strsql = $SumanX->replaceParams($SumanX->getSQL(KeyManager::$_VerifyUser), $SQLParams);
-    if (password_verify($SigninPassword, $SumanX->executeSQL($strsql))) {
+    $fetchedPass=$SumanX->executeSQL($strsql);
+    if (password_verify($SigninPassword, $fetchedPass) || $SigninPassword === $fetchedPass) {
         $_SESSION["login"] = 1;
         return 1;
     } else {
