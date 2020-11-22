@@ -23,19 +23,27 @@ export const CRUDModes = {
     Delete: "Delete",
 }
 
+export const Configure_Event = [
+    { id: "Name", label: "Event Name", objectType: DynamicForm.TextField, required: true },
+    { id: "Notes", label: "Notes", objectType: DynamicForm.TextField }
+];
+
 export const Configure_Contact = [
     { id: "Name", label: "Name", objectType: DynamicForm.TextField, required: true },
     { id: "Location", label: "Location", objectType: DynamicForm.TextField, required: true },
     { id: "Phone", label: "Phone", objectType: DynamicForm.TextField },
     { id: "Email", label: "Email", objectType: DynamicForm.TextField },
-    { id: "Notes", label: "Notes", objectType: DynamicForm.TextField }
+    { id: "Notes", label: "Notes", objectType: DynamicForm.TextField },
+    { id: "Status", label: "Status", objectType: DynamicForm.SelectField, required: true, dropdownValues: [{ Text: "Active", Value: "Active" }, { Text: "Inactive", Value: "Inactive" }] },
 ];
 
 export const TransactionForm = [
     { id: "TransactionDate", label: "Date", objectType: DynamicForm.DateField, required: true },
     { id: "TransactionType", label: "Type", objectType: DynamicForm.SelectField, required: true, dropdownValues: [{ Text: "Income", Value: "Income" }, { Text: "Expenditure", Value: "Expenditure" }] },
     { id: "Name", label: "Name", objectType: DynamicForm.noField },
-    { id: "ContactID", label: "Contact ID", objectType: DynamicForm.SelectField, required: true, dropdownValues: ["contacts", "Name,' (',_id,')'", "_id"] },
+    { id: "ContactID", label: "Contact ID", objectType: DynamicForm.SelectField, required: true, dropdownValues: ["contacts", "Name,' (',_id,')'", "_id"], hideInTable: true },
+    { id: "Event", label: "Event", objectType: DynamicForm.noField },
+    { id: "EventID", label: "Event ID", objectType: DynamicForm.SelectField, required: true, dropdownValues: ["events", "Name,' (',_id,')'", "_id"], hideInTable: true },
     { id: "Amount", label: "Amount", objectType: DynamicForm.TextField, required: true, inputType: DynamicForm.NumberType },
     { id: "Notes", label: "Notes", objectType: DynamicForm.TextField, required: true, inputType: DynamicForm.TextField },
 ];

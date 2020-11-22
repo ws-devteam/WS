@@ -1,8 +1,8 @@
 import React from 'react'
 import CRUDTable from "./components/CRUDFramework/CRUDTable"
-import { Configure_Contact, TransactionForm, getDynamicForm, REST_API } from './components/CRUDFramework/Config'
+import { Configure_Event, Configure_Contact, TransactionForm, getDynamicForm, REST_API } from './components/CRUDFramework/Config'
 import { Container, Box, Drawer, List, ListItem, ListItemIcon, ListItemText, Divider, AppBar, Toolbar, IconButton, Typography } from '@material-ui/core'
-import { Menu, AccountBalanceWallet, AccountCircle } from '@material-ui/icons'
+import { Menu, AccountBalanceWallet, AccountCircle, Event } from '@material-ui/icons'
 import axios from 'axios'
 
 export class App extends React.Component {
@@ -17,7 +17,8 @@ export class App extends React.Component {
   }
   menuConfig = [
     { Label: 'Transactions', Columns: TransactionForm, icon: <AccountBalanceWallet /> },
-    { Label: 'Contacts', Columns: Configure_Contact, icon: <AccountCircle /> }
+    { Label: 'Contacts', Columns: Configure_Contact, icon: <AccountCircle /> },
+    { Label: 'Events', Columns: Configure_Event, icon: <Event /> }
   ]
   handleCreateDoc = (doc) => {
     axios.post(REST_API.link, { f: REST_API.methods.create, collectionParam: this.state.selectedMenu, formData: doc })
