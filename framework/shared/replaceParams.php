@@ -19,7 +19,8 @@ class ReplaceParams
 class API_ReplaceParams
 {
     public static $_collectionParam = "collectionParam";
-    public static $_fieldParam = "fieldParam";
+    public static $_textParam = "textParam";
+    public static $_valueParam = "valueParam";
     public static $_formData = "formData";
     public static $_id = "_id";
 }

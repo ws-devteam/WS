@@ -47,10 +47,7 @@ export class App extends React.Component {
       .then((resp) => this.fetchedForm = resp)
       .catch(e => console.error(e)))
     promisesList.push(axios.post(REST_API.link, { f: REST_API.methods.read, collectionParam: this.menuConfig[i].Label })
-      .then(resp => {
-        this.fetchedRows = resp.data
-        console.log(resp.data)
-      })
+      .then(resp => this.fetchedRows = resp.data)
       .catch(e => console.error(e)))
     Promise.all(promisesList).then(() => {
       this.setState({

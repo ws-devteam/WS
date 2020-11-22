@@ -16,8 +16,8 @@ extract($_POST);
 
 switch ($f) {
     case 'fetchField':
-        verifyParam(2, API_ReplaceParams::$_collectionParam, API_ReplaceParams::$_fieldParam);
-        $SQLParams = $SumanX->prepareParamsbyArgs(API_ReplaceParams::$_collectionParam, $collectionParam, API_ReplaceParams::$_fieldParam, $fieldParam);
+        verifyParam(3, API_ReplaceParams::$_collectionParam, API_ReplaceParams::$_textParam, API_ReplaceParams::$_valueParam);
+        $SQLParams = $SumanX->prepareParamsbyArgs(API_ReplaceParams::$_collectionParam, $collectionParam, API_ReplaceParams::$_textParam, $textParam, API_ReplaceParams::$_valueParam, $valueParam);
         $strsql = $SumanX->replaceParams($SumanX->getSQL(API_KeyManager::$_fetchField), $SQLParams);
         print(json_encode($SumanX->executeSQL($strsql), JSON_PRETTY_PRINT));
         break;
@@ -47,6 +47,8 @@ switch ($f) {
         if ($SumanX->executeSQL($strsql))
             read($collectionParam, $SumanX);
         break;
+    default:
+        die("Function not defined");
 }
 function verifyParam($n, ...$params)
 {
@@ -55,10 +57,11 @@ function verifyParam($n, ...$params)
         if (isset($_POST[$p]))
             $i++;
     if ($i != $n)
-        die('Invalid Parameter Size');
+        die('Invalid Parameters');
 }
-function read($tableName, $frmwk)
+function read($collectionParam, $frmwk)
 {
-    $strsql = "select * from $tableName";
+    $SQLParams = $frmwk->prepareParamsbyArgs(API_ReplaceParams::$_collectionParam, $collectionParam);
+    $strsql = $frmwk->replaceParams($frmwk->getSQL(API_KeyManager::$_read), $SQLParams);
     print(json_encode($frmwk->executeSQL($strsql), JSON_PRETTY_PRINT));
 }
