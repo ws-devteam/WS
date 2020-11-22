@@ -1,3 +1,4 @@
 /.ignore
 /img/bg-img
 /img/user
+*debug.log*
