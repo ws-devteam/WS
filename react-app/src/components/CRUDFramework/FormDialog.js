@@ -49,7 +49,7 @@ export default class FormDialog extends React.Component {
     }
     generateDynamicForm() {
         let formFields = this.props.formFields
-        let breakPoint = 0
+        let breakPoint = 0, nofield = 0, nofieldCount = 0
         let tempObj = []
         let generatedForm =
             formFields.map(field => {
@@ -72,22 +72,30 @@ export default class FormDialog extends React.Component {
                                 onChange={(e) => this.handleChange(e, field.id)}
                             >
                                 <MenuItem value="-1" disabled><em>{field.label}</em></MenuItem>
-                                {field.dropdownValues.map((itemVal) => {
-                                    return <MenuItem value={itemVal}>{itemVal}</MenuItem>
+                                {field.dropdownValues.map(item => {
+                                    return <MenuItem value={item.Value}>{item.Text}</MenuItem>
                                 })}
                             </Select>
                         </FormControl>
                         break;
+                    case DynamicForm.noField:
+                        nofield = 1
+                        nofieldCount++
+                        break
                     default:
                         return console.log("Error Object Type : " + field.objectType)
                 }
-                tempObj.push(<Grid item xs={12} sm={4}> {rawObj} </Grid>)
-                breakPoint++
-                if (breakPoint % 3 === 0 || breakPoint === formFields.length) {
-                    let temp = <Grid container spacing={3}>{tempObj}</Grid>
-                    tempObj = []
-                    return temp
+                if (nofield === 0) {
+                    tempObj.push(<Grid item xs={12} sm={4}> {rawObj} </Grid>)
+                    breakPoint++
+                    if (breakPoint % 3 === 0 || breakPoint === formFields.length - nofieldCount) {
+                        let temp = <Grid container spacing={3}>{tempObj}</Grid>
+                        tempObj = []
+                        return temp
+                    }
                 }
+                else
+                    nofield = 0
                 return null
             })
         this.setState({
