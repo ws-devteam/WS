@@ -134,9 +134,8 @@ export default class StickyHeadTable extends React.Component {
                 <TableRow>
                   <TableCell>Actions</TableCell>
                   {this.props.columns.map((column) => (
-                    <TableCell
-                      key={column.id}
-                    >
+                    column.hideInTable !== true &&
+                    <TableCell key={column.id} >
                       {column.label}
                     </TableCell>
                   ))}
@@ -165,7 +164,7 @@ export default class StickyHeadTable extends React.Component {
                             year: 'numeric', month: 'short', day: 'numeric'
                           })
                         }
-                        return <TableCell>{cellVal}</TableCell>;
+                        return column.hideInTable !== true && <TableCell>{cellVal}</TableCell>;
                       })}
                     </TableRow>
                   );
