@@ -47,6 +47,12 @@ switch ($f) {
         if ($SumanX->executeSQL($strsql))
             read($collectionParam, $SumanX);
         break;
+    case 'readExtended':
+        verifyParam(1, API_ReplaceParams::$_sqlKey);
+        $SQLParams = $SumanX->prepareParamsbyArgs(API_ReplaceParams::$_sqlKey, "Hey");
+        $strsql = $SumanX->replaceParams($SumanX->getSQL($sqlKey), $SQLParams);
+        print(json_encode($SumanX->executeSQL($strsql), JSON_PRETTY_PRINT));
+        break;
     default:
         die("Function not defined");
 }

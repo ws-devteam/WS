@@ -7,6 +7,7 @@ export const REST_API = {
         read: "read",
         update: "update",
         delete: "delete",
+        readExtended: "readExtended",
     }
 }
 

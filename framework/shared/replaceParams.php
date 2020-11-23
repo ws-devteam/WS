@@ -23,4 +23,5 @@ class API_ReplaceParams
     public static $_valueParam = "valueParam";
     public static $_formData = "formData";
     public static $_id = "_id";
+    public static $_sqlKey = "sqlKey";
 }
