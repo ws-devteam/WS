@@ -1,9 +1,15 @@
 import React from 'react';
-import { List, ListItem, ListItemAvatar, ListItemText, Grid, Box, Avatar, Typography, Card, CardActionArea, Collapse } from "@material-ui/core"
+import {
+    List, ListItem, ListItemAvatar, ListItemText, Grid, Box, Avatar, Typography, Card, CardActionArea, Collapse,
+    Tooltip, Button, ButtonGroup, CardContent
+} from "@material-ui/core"
 import { green, red } from '@material-ui/core/colors'
-import { CallMade, CallReceived, Phone, AlternateEmail, LocationOnOutlined, PersonOutlineOutlined } from '@material-ui/icons'
+import { CallMade, CallReceived, Phone, AlternateEmail, LocationOnOutlined, PersonOutlineOutlined, FilterList } from '@material-ui/icons'
 import { REST_API } from './CRUDFramework/Config'
 import Skeleton from "react-loading-skeleton"
+import 'react-date-range/dist/styles.css' // main css file
+import 'react-date-range/dist/theme/default.css' // theme css file
+import { DateRange } from 'react-date-range'
 import axios from 'axios'
 
 export default class Reports extends React.Component {
@@ -12,6 +18,11 @@ export default class Reports extends React.Component {
         this.state = {
             dyncamicCardExpand: {},
             fetchedRows: null,
+            dateRangeSelection: [{
+                startDate: (new Date()).setDate(new Date().getDate() - 2),
+                endDate: new Date(),
+                key: 'dateRangeSelection'
+            }]
         }
     }
     handleClick = (id) => {
@@ -25,9 +36,73 @@ export default class Reports extends React.Component {
         axios.post(REST_API.link, { f: REST_API.methods.readExtended, sqlKey: "fetchReports" })
             .then(resp => this.setState({ fetchedRows: resp.data || [] }))
     }
+    handleDateChange = (item) => {
+        this.setState({ dateRangeSelection: [item.dateRangeSelection] })
+    }
     render() {
         return (
             <React.Fragment>
+
+                <Grid container spacing={2} alignItems="center">
+                    <Grid item sm>
+                        <DateRange editableDateInputs={true} onChange={(item) => this.handleDateChange(item)}
+                            moveRangeOnFirstSelection={false}
+                            ranges={this.state.dateRangeSelection} />
+                    </Grid>
+                    <Grid item sm>
+                        <Card elevation={2}>
+                            <CardContent>
+                                <ListItem alignItems="flex-start">
+                                    <ListItemAvatar>
+                                        <Avatar style={{ backgroundColor: green[500] }}> <CallReceived /> </Avatar>
+                                    </ListItemAvatar>
+                                    <ListItemText primary="Total Income" secondary={
+                                        <React.Fragment>
+                                            {new Date(this.state.dateRangeSelection[0].startDate).toLocaleDateString('en-GB', {
+                                                year: 'numeric', month: 'short', day: 'numeric'
+                                            })} {" - "}
+                                            {new Date(this.state.dateRangeSelection[0].endDate).toLocaleDateString('en-GB', {
+                                                year: 'numeric', month: 'short', day: 'numeric'
+                                            })}
+                                        </React.Fragment>
+                                    } />
+                                    <Box alignItems="right">
+                                        <Typography variant="h6">₹ {"t.Amount"}</Typography>
+                                    </Box>
+                                </ListItem>
+                            </CardContent>
+                            <CardContent>
+                                <ListItem alignItems="flex-start">
+                                    <ListItemAvatar>
+                                        <Avatar style={{ backgroundColor: red[500] }}> <CallMade /> </Avatar>
+                                    </ListItemAvatar>
+                                    <ListItemText primary="Total Expenditure" secondary={
+                                        <React.Fragment>
+                                            {new Date(this.state.dateRangeSelection[0].startDate).toLocaleDateString('en-GB', {
+                                                year: 'numeric', month: 'short', day: 'numeric'
+                                            })} {" - "}
+                                            {new Date(this.state.dateRangeSelection[0].endDate).toLocaleDateString('en-GB', {
+                                                year: 'numeric', month: 'short', day: 'numeric'
+                                            })}
+                                        </React.Fragment>
+                                    } />
+                                    <Box alignItems="right">
+                                        <Typography variant="h6">₹ {"t.Amount"}</Typography>
+                                    </Box>
+                                </ListItem>
+                            </CardContent>
+                        </Card>
+                    </Grid>
+                </Grid>
+
+                <Box display="flex" justifyContent="flex-end" p={1} bgcolor="grey.200">
+                    <ButtonGroup variant="text" color="primary">
+                        <Tooltip title="Filter">
+                            <Button><FilterList /></Button>
+                        </Tooltip>
+                    </ButtonGroup>
+                </Box>
+
                 <List>
                     {
                         (this.state.fetchedRows === null && <Skeleton count={5} height={50} />)
