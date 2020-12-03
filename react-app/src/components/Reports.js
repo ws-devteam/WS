@@ -5,7 +5,8 @@ import {
 } from "@material-ui/core"
 import { green, red } from '@material-ui/core/colors'
 import { CallMade, CallReceived, Phone, AlternateEmail, LocationOnOutlined, PersonOutlineOutlined, FilterList } from '@material-ui/icons'
-import { REST_API } from './CRUDFramework/Config'
+import { REST_API, getFormattedDate, BlankResult } from './CRUDFramework/Config'
+import FilterDialog from "./CRUDFramework/FilterDialog";
 import Skeleton from "react-loading-skeleton"
 import 'react-date-range/dist/styles.css' // main css file
 import 'react-date-range/dist/theme/default.css' // theme css file
@@ -22,7 +23,8 @@ export default class Reports extends React.Component {
                 startDate: (new Date()).setDate(new Date().getDate() - 2),
                 endDate: new Date(),
                 key: 'dateRangeSelection'
-            }]
+            }],
+            openFilterDialog: false,
         }
     }
     handleClick = (id) => {
@@ -33,16 +35,25 @@ export default class Reports extends React.Component {
         })
     }
     componentDidMount() {
-        axios.post(REST_API.link, { f: REST_API.methods.readExtended, sqlKey: "fetchReports" })
-            .then(resp => this.setState({ fetchedRows: resp.data || [] }))
+        this.fetchReport()
     }
     handleDateChange = (item) => {
-        this.setState({ dateRangeSelection: [item.dateRangeSelection] })
+        this.setState({ dateRangeSelection: [item.dateRangeSelection], fetchedRows: null }, this.fetchReport)
+    }
+    fetchReport() {
+        axios.post(REST_API.link, {
+            f: REST_API.methods.readExtended, sqlKey: "fetchReports",
+            sqlConditions: {
+                startDate: getFormattedDate(this.state.dateRangeSelection[0].startDate),
+                endDate: getFormattedDate(this.state.dateRangeSelection[0].endDate),
+            }
+        })
+            .then(resp => this.setState({ fetchedRows: resp.data || [] }))
     }
     render() {
         return (
             <React.Fragment>
-
+                <FilterDialog trigger={this.state.openFilterDialog} onDismiss={this.handleDialogDismiss} />
                 <Grid container spacing={2} alignItems="center">
                     <Grid item sm>
                         <DateRange editableDateInputs={true} onChange={(item) => this.handleDateChange(item)}
@@ -98,7 +109,7 @@ export default class Reports extends React.Component {
                 <Box display="flex" justifyContent="flex-end" p={1} bgcolor="grey.200">
                     <ButtonGroup variant="text" color="primary">
                         <Tooltip title="Filter">
-                            <Button><FilterList /></Button>
+                            <Button onClick={() => this.setState({ openFilterDialog: !this.state.openFilterDialog })}><FilterList /></Button>
                         </Tooltip>
                     </ButtonGroup>
                 </Box>
@@ -106,6 +117,8 @@ export default class Reports extends React.Component {
                 <List>
                     {
                         (this.state.fetchedRows === null && <Skeleton count={5} height={50} />)
+                        ||
+                        (this.state.fetchedRows.length === 0 && <BlankResult />)
                         ||
                         (
                             this.state.fetchedRows.map(t => {
