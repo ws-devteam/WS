@@ -48,8 +48,8 @@ switch ($f) {
             read($collectionParam, $SumanX);
         break;
     case 'readExtended':
-        verifyParam(1, API_ReplaceParams::$_sqlKey);
-        $SQLParams = $SumanX->prepareParamsbyArgs(API_ReplaceParams::$_sqlKey, "Hey");
+        verifyParam(2, API_ReplaceParams::$_sqlKey, API_ReplaceParams::$_sqlConditions);
+        $SQLParams = $SumanX->prepareParamsbyArray($sqlConditions);
         $strsql = $SumanX->replaceParams($SumanX->getSQL($sqlKey), $SQLParams);
         print(json_encode($SumanX->executeSQL($strsql), JSON_PRETTY_PRINT));
         break;
