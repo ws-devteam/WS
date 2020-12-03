@@ -1,4 +1,8 @@
-import axios from "axios"
+import axios from 'axios'
+import { Alert } from '@material-ui/lab'
+import { File } from 'react-kawaii'
+import { Box } from '@material-ui/core'
+
 export const REST_API = {
     link: "http://localhost/WS/BL/api.php",
     methods: {
@@ -79,4 +83,18 @@ const fillDropdownValues = (dropDownValObj) => {
             .then(resp => resolve(resp.data))
             .catch(e => reject(e))
     })
+}
+export function getFormattedDate(dt) {
+    dt = (dt && new Date(dt)) || new Date()
+    let month = dt.getMonth() + 1
+    let day = dt.getDate()
+    return dt.getFullYear() + "-" + (month < 10 ? 0 : '') + month + "-" + (day < 10 ? 0 : '') + day
+}
+export const BlankResult = () => {
+    return <Box p={3}>
+        <Box justifyContent="center" display="flex">
+            <File size={200} mood="ko" color="#83D1FB" />
+        </Box>
+        <Alert severity="info" variant="outlined">Nothing is there!</Alert>
+    </Box>
 }

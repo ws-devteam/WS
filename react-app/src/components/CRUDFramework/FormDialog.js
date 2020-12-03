@@ -5,7 +5,7 @@ import {
 } from '@material-ui/core';
 import { Close } from '@material-ui/icons'
 import Skeleton from 'react-loading-skeleton'
-import { DynamicForm, CRUDModes } from './Config'
+import { DynamicForm, CRUDModes, getFormattedDate } from './Config'
 
 const DialogTransition = React.forwardRef(function Transition(props, ref) {
     return <Slide direction="up" ref={ref} {...props} />;
@@ -41,12 +41,6 @@ export default class FormDialog extends React.Component {
             dynamicStates: obj,
         }, this.generateDynamicForm)
     }
-    getFormattedDate(dt) {
-        dt = (dt && new Date(dt)) || new Date()
-        let month = dt.getMonth() + 1
-        let day = dt.getDate()
-        return dt.getFullYear() + "-" + (month < 10 ? 0 : '') + month + "-" + (day < 10 ? 0 : '') + day
-    }
     generateDynamicForm() {
         let formFields = this.props.formFields
         let breakPoint = 0, nofield = 0, nofieldCount = 0
@@ -63,7 +57,7 @@ export default class FormDialog extends React.Component {
                         break;
                     case DynamicForm.DateField:
                         rawObj = <TextField name={field.id} label={field.label} type="date"
-                            defaultValue={this.getFormattedDate(savedValue)} InputLabelProps={{ shrink: true }}
+                            defaultValue={getFormattedDate(savedValue)} InputLabelProps={{ shrink: true }}
                             variant="outlined" margin="dense" autoComplete="off" fullWidth />
                         break;
                     case DynamicForm.SelectField:
