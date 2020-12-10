@@ -98,3 +98,6 @@ export const BlankResult = () => {
         <Alert severity="info" variant="outlined">Nothing is there!</Alert>
     </Box>
 }
+export function generateUniqueKeys(data) {
+    return data + "_" + new Date().getTime() + Math.random() * 100
+}

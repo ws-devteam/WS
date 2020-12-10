@@ -5,7 +5,7 @@ import {
 } from "@material-ui/core"
 import { green, red } from '@material-ui/core/colors'
 import { CallMade, CallReceived, Phone, AlternateEmail, LocationOnOutlined, PersonOutlineOutlined, FilterList } from '@material-ui/icons'
-import { REST_API, getFormattedDate, BlankResult } from './CRUDFramework/Config'
+import { REST_API, getFormattedDate, BlankResult, TransactionForm, getDynamicForm, generateUniqueKeys } from './CRUDFramework/Config'
 import FilterDialog from "./CRUDFramework/FilterDialog";
 import Skeleton from "react-loading-skeleton"
 import 'react-date-range/dist/styles.css' // main css file
@@ -19,11 +19,15 @@ export default class Reports extends React.Component {
         this.state = {
             dyncamicCardExpand: {},
             fetchedRows: null,
+            income: 0,
+            expenditure: 0,
+            fetchedFilters: null,
             dateRangeSelection: [{
-                startDate: (new Date()).setDate(new Date().getDate() - 2),
+                startDate: new Date((new Date()).setDate(new Date().getDate() - 2)),
                 endDate: new Date(),
                 key: 'dateRangeSelection'
             }],
+            filterFieldValues: {},
             openFilterDialog: false,
         }
     }
@@ -37,10 +41,13 @@ export default class Reports extends React.Component {
     componentDidMount() {
         this.fetchReport()
     }
-    handleDateChange = (item) => {
-        this.setState({ dateRangeSelection: [item.dateRangeSelection], fetchedRows: null }, this.fetchReport)
-    }
     fetchReport() {
+        getDynamicForm(TransactionForm)
+            .then((resp) => this.setState({ fetchedFilters: resp }))
+            .catch(e => console.error(e))
+        this.callReportAPI()
+    }
+    callReportAPI() {
         axios.post(REST_API.link, {
             f: REST_API.methods.readExtended, sqlKey: "fetchReports",
             sqlConditions: {
@@ -48,12 +55,33 @@ export default class Reports extends React.Component {
                 endDate: getFormattedDate(this.state.dateRangeSelection[0].endDate),
             }
         })
-            .then(resp => this.setState({ fetchedRows: resp.data || [] }))
+            .then(resp => {
+                let _income = 0, _expenditure = 0;
+                (resp.data).map(t => {
+                    if (t.TransactionType === "Income")
+                        _income += Number(t.Amount)
+                    else if (t.TransactionType === "Expenditure")
+                        _expenditure += Number(t.Amount)
+                    return 1
+                })
+                this.setState({ fetchedRows: resp.data || [], income: _income, expenditure: _expenditure })
+            })
+            .catch(e => console.error(e))
+    }
+    handleDateChange = (item) => {
+        this.setState({ dateRangeSelection: [item.dateRangeSelection], fetchedRows: null }, this.fetchReport)
+    }
+    handleDialogDismiss = () => {
+        this.setState({ openFilterDialog: !this.state.openFilterDialog })
+    }
+    handleFilterSubmit = (savedFiltersData) => {
+        this.setState({ filterFieldValues: savedFiltersData }, this.callReportAPI)
+        this.handleDialogDismiss()
     }
     render() {
         return (
             <React.Fragment>
-                <FilterDialog trigger={this.state.openFilterDialog} onDismiss={this.handleDialogDismiss} />
+                {this.state.fetchedFilters !== null && <FilterDialog trigger={this.state.openFilterDialog} onDismiss={this.handleDialogDismiss} onSave={this.handleFilterSubmit} filterFields={this.state.fetchedFilters} filterFieldValues={this.state.filterFieldValues} />}
                 <Grid container spacing={2} alignItems="center">
                     <Grid item sm>
                         <DateRange editableDateInputs={true} onChange={(item) => this.handleDateChange(item)}
@@ -78,7 +106,7 @@ export default class Reports extends React.Component {
                                         </React.Fragment>
                                     } />
                                     <Box alignItems="right">
-                                        <Typography variant="h6">₹ {"t.Amount"}</Typography>
+                                        <Typography variant="h6">₹ {this.state.income}</Typography>
                                     </Box>
                                 </ListItem>
                             </CardContent>
@@ -98,7 +126,7 @@ export default class Reports extends React.Component {
                                         </React.Fragment>
                                     } />
                                     <Box alignItems="right">
-                                        <Typography variant="h6">₹ {"t.Amount"}</Typography>
+                                        <Typography variant="h6">₹ {this.state.expenditure}</Typography>
                                     </Box>
                                 </ListItem>
                             </CardContent>
@@ -123,7 +151,7 @@ export default class Reports extends React.Component {
                         (
                             this.state.fetchedRows.map(t => {
                                 return (
-                                    <Card>
+                                    <Card key={generateUniqueKeys(t._id)}>
                                         <CardActionArea onClick={this.handleClick.bind(this, t._id)}>
                                             <ListItem alignItems="flex-start">
                                                 <ListItemAvatar>
