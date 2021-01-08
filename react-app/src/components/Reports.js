@@ -53,6 +53,7 @@ export default class Reports extends React.Component {
             sqlConditions: {
                 startDate: getFormattedDate(this.state.dateRangeSelection[0].startDate),
                 endDate: getFormattedDate(this.state.dateRangeSelection[0].endDate),
+                filters: this.state.filterFieldValues,
             }
         })
             .then(resp => {
