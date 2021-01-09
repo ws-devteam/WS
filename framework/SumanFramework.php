@@ -32,6 +32,25 @@ class SumanFramework
         }
         return $paramArray;
     }
+    public function prepareParamsbyArray($params)
+    {
+        $paramArray = array();
+        foreach (array_keys($params) as $k) {
+            switch (gettype($params[$k])) {
+                case "string":
+                    array_push($paramArray, array("#" . strtoupper($k) . "#", $params[$k]));
+                    break;
+                case "array":
+                    if (array_keys($params[$k]) === range(0, count($params[$k]) - 1)) //Associative or Sequential array check
+                        array_push($paramArray, array("#" . strtoupper($k) . "#", implode("','", array_values($params[$k]))));
+                    else
+                        foreach ($this->prepareParamsbyArray($params[$k]) as $val)
+                            array_push($paramArray, $val);
+                    break;
+            }
+        }
+        return $paramArray;
+    }
     public function replaceParams($sql, $sqlParams)
     {
         foreach ($sqlParams as $param) {

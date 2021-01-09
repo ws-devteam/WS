@@ -4,10 +4,8 @@ import {
   Dialog, DialogActions, DialogTitle, DialogContent, Button, DialogContentText, Box, TextField,
 } from '@material-ui/core';
 import { Add, Edit, Delete } from '@material-ui/icons'
-import { Alert } from '@material-ui/lab'
 import FormDialog from './FormDialog'
-import { CRUDModes, DynamicForm } from './Config'
-import { File } from 'react-kawaii'
+import { CRUDModes, DynamicForm, BlankResult } from './Config'
 
 export default class StickyHeadTable extends React.Component {
   constructor(props) {
@@ -84,12 +82,7 @@ export default class StickyHeadTable extends React.Component {
   renderBody = () => {
     switch (this.props.rows.length) {
       case 0:
-        return <Box p={3}>
-          <Box justifyContent="center" display="flex">
-            <File size={200} mood="ko" color="#83D1FB" />
-          </Box>
-          <Alert severity="info" variant="outlined">Nothing is there!</Alert>
-        </Box>
+        return <BlankResult />
       default:
         return <TablePagination
           count={this.props.rows.length}
@@ -134,9 +127,8 @@ export default class StickyHeadTable extends React.Component {
                 <TableRow>
                   <TableCell>Actions</TableCell>
                   {this.props.columns.map((column) => (
-                    <TableCell
-                      key={column.id}
-                    >
+                    column.hideInTable !== true &&
+                    <TableCell key={column.id} >
                       {column.label}
                     </TableCell>
                   ))}
@@ -165,7 +157,7 @@ export default class StickyHeadTable extends React.Component {
                             year: 'numeric', month: 'short', day: 'numeric'
                           })
                         }
-                        return <TableCell>{cellVal}</TableCell>;
+                        return column.hideInTable !== true && <TableCell>{cellVal}</TableCell>;
                       })}
                     </TableRow>
                   );

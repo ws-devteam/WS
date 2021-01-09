@@ -1,8 +1,10 @@
 import React from 'react'
 import CRUDTable from "./components/CRUDFramework/CRUDTable"
-import { Configure_Contact, TransactionForm, getDynamicForm, REST_API } from './components/CRUDFramework/Config'
-import { Container, Box, Drawer, List, ListItem, ListItemIcon, ListItemText, Divider, AppBar, Toolbar, IconButton, Typography } from '@material-ui/core'
-import { Menu, AccountBalanceWallet, AccountCircle } from '@material-ui/icons'
+import Reports from './components/Reports'
+import { Configure_Event, Configure_Contact, TransactionForm, getDynamicForm, REST_API } from './components/CRUDFramework/Config'
+import { Grow, Container, Box, Drawer, List, ListItem, ListItemIcon, ListItemText, Divider, AppBar, Toolbar, IconButton, Typography } from '@material-ui/core'
+import { Menu, AccountBalanceWallet, AccountCircle, Event, Timeline } from '@material-ui/icons'
+import Skeleton from 'react-loading-skeleton'
 import axios from 'axios'
 
 export class App extends React.Component {
@@ -13,11 +15,14 @@ export class App extends React.Component {
       columns: null,
       drawerOpen: false,
       selectedMenu: null,
+      selectedMenuIndex: 0,
     }
   }
   menuConfig = [
+    { Label: 'Reports', Columns: TransactionForm, icon: <Timeline />, Component: <Reports /> },
     { Label: 'Transactions', Columns: TransactionForm, icon: <AccountBalanceWallet /> },
-    { Label: 'Contacts', Columns: Configure_Contact, icon: <AccountCircle /> }
+    { Label: 'Contacts', Columns: Configure_Contact, icon: <AccountCircle /> },
+    { Label: 'Events', Columns: Configure_Event, icon: <Event /> }
   ]
   handleCreateDoc = (doc) => {
     axios.post(REST_API.link, { f: REST_API.methods.create, collectionParam: this.state.selectedMenu, formData: doc })
@@ -38,7 +43,7 @@ export class App extends React.Component {
     this.setState({ drawerOpen: !this.state.drawerOpen })
   }
   handleMenuChange = (txt, i) => {
-    this.setState({ selectedMenu: txt }, () => this.fetchAll(i))
+    this.setState({ selectedMenu: txt, selectedMenuIndex: i, rows: null, columns: null }, () => this.fetchAll(i))
     this.toggleDrawer()
   }
   fetchAll(i) {
@@ -47,10 +52,7 @@ export class App extends React.Component {
       .then((resp) => this.fetchedForm = resp)
       .catch(e => console.error(e)))
     promisesList.push(axios.post(REST_API.link, { f: REST_API.methods.read, collectionParam: this.menuConfig[i].Label })
-      .then(resp => {
-        this.fetchedRows = resp.data
-        console.log(resp.data)
-      })
+      .then(resp => this.fetchedRows = resp.data)
       .catch(e => console.error(e)))
     Promise.all(promisesList).then(() => {
       this.setState({
@@ -74,8 +76,8 @@ export class App extends React.Component {
           </ListItem>
           <Divider />
           <List>
-            {this.menuConfig.map((obj, index) => (
-              <ListItem button key={obj.Label} onClick={() => this.handleMenuChange(obj.Label, index)}>
+            {this.menuConfig.map((obj, i) => (
+              <ListItem button key={obj.Label} onClick={() => this.handleMenuChange(obj.Label, i)}>
                 <ListItemIcon>
                   {obj.icon}
                 </ListItemIcon>
@@ -88,9 +90,21 @@ export class App extends React.Component {
         <Container>
           <Box my={3}>
             {
-              this.state.rows !== null && this.state.columns !== null &&
-              <CRUDTable rows={this.state.rows} columns={this.state.columns}
-                onCreate={this.handleCreateDoc} onUpdate={this.handleUpdateDoc} onDelete={this.handleDeleteDoc} />
+              this.menuConfig.map((obj, i) =>
+                <Grow in={this.state.selectedMenuIndex === i} style={{ transformOrigin: '0 0 0' }} unmountOnExit={true}>
+                  <div hidden={this.state.selectedMenuIndex !== i}>
+                    {
+                      obj.Component
+                      ||
+                      (this.state.rows !== null && this.state.columns !== null &&
+                        <CRUDTable rows={this.state.rows} columns={this.state.columns}
+                          onCreate={this.handleCreateDoc} onUpdate={this.handleUpdateDoc} onDelete={this.handleDeleteDoc} />)
+                      ||
+                      <Skeleton count={5} height={50} />
+                    }
+                  </div>
+                </Grow>
+              )
             }
           </Box>
         </Container>
