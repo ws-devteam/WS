@@ -23,7 +23,7 @@ switch ($f) {
         break;
     case 'create':
         verifyParam(2, API_ReplaceParams::$_collectionParam, API_ReplaceParams::$_formData);
-        $strsql = "insert into $collectionParam (" . implode(",", array_keys($formData)) . ") values ('"
+        $strsql = "insert into " . strtolower($collectionParam) . " (" . implode(",", array_keys($formData)) . ") values ('"
             . implode("','", array_values($formData)) . "')";
         if ($SumanX->executeSQL($strsql))
             read($collectionParam, $SumanX);
@@ -37,13 +37,13 @@ switch ($f) {
         $tempStatement = "";
         foreach ($formData as $k => $v)
             $tempStatement .= "$k = '$v',";
-        $strsql = "update $collectionParam set $tempStatement updatedAt=now() where " . API_ReplaceParams::$_id . " = '$_id'";
+        $strsql = "update " . strtolower($collectionParam) . " set $tempStatement updatedAt=now() where " . API_ReplaceParams::$_id . " = '$_id'";
         if ($SumanX->executeSQL($strsql))
             read($collectionParam, $SumanX);
         break;
     case 'delete':
         verifyParam(2, API_ReplaceParams::$_collectionParam, API_ReplaceParams::$_id);
-        $strsql = "delete from " . $collectionParam . " where " . API_ReplaceParams::$_id . " = '$_id'";
+        $strsql = "delete from " . strtolower($collectionParam) . " where " . API_ReplaceParams::$_id . " = '$_id'";
         if ($SumanX->executeSQL($strsql))
             read($collectionParam, $SumanX);
         break;
