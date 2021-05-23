@@ -4,7 +4,7 @@ import { File } from 'react-kawaii'
 import { Box } from '@material-ui/core'
 
 export const REST_API = {
-    link: "http://localhost/WS/BL/api.php",
+    link: "http://localhost:8080/WS/BL/api.php",
     methods: {
         fetchField: "fetchField",
         create: "create",
@@ -29,11 +29,17 @@ export const CRUDModes = {
 }
 
 export const Configure_Event = [
-    { id: "Name", label: "Event Name", objectType: DynamicForm.TextField, required: true },
-    { id: "Notes", label: "Notes", objectType: DynamicForm.TextField }
+    { id: "Name", label: "Name", objectType: DynamicForm.TextField, required: true },
+    { id: "Client", label: "Client", objectType: DynamicForm.noField },
+    { id: "ClientID", label: "Client ID", objectType: DynamicForm.SelectField, required: true, dropdownValues: ["clients", "Name,' (',_id,')'", "_id"], hideInTable: true },
+    { id: "EventType", label: "Event Type", objectType: DynamicForm.SelectField, required: true, dropdownValues: [{ Text: "Wedding", Value: "Wedding" }, { Text: "Pre-Wedding", Value: "Pre-Wedding" }, { Text: "Rice Ceremony", Value: "Rice Ceremony" }] },
+    { id: "Venue", label: "Venue", objectType: DynamicForm.TextField },
+    { id: "Contact", label: "Contact", objectType: DynamicForm.TextField },
+    { id: "Notes", label: "Notes", objectType: DynamicForm.TextField },
+    { id: "Status", label: "Status", objectType: DynamicForm.SelectField, required: true, dropdownValues: [{ Text: "Active", Value: "Active" }, { Text: "Inactive", Value: "Inactive" }] },
 ];
 
-export const Configure_Contact = [
+export const Configure_Client = [
     { id: "Name", label: "Name", objectType: DynamicForm.TextField, required: true },
     { id: "Location", label: "Location", objectType: DynamicForm.TextField, required: true },
     { id: "Phone", label: "Phone", objectType: DynamicForm.TextField },
@@ -44,11 +50,12 @@ export const Configure_Contact = [
 
 export const TransactionForm = [
     { id: "TransactionDate", label: "Date", objectType: DynamicForm.DateField, required: true },
-    { id: "TransactionType", label: "Type", objectType: DynamicForm.SelectField, required: true, dropdownValues: [{ Text: "Income", Value: "Income" }, { Text: "Expenditure", Value: "Expenditure" }] },
-    { id: "Name", label: "Name", objectType: DynamicForm.noField },
-    { id: "ContactID", label: "Contact ID", objectType: DynamicForm.SelectField, required: true, dropdownValues: ["contacts", "Name,' (',_id,')'", "_id"], hideInTable: true },
+    { id: "Category", label: "Category", objectType: DynamicForm.SelectField, required: true, dropdownValues: [{ Text: "Income", Value: "Income" }, { Text: "Expenditure", Value: "Expenditure" }] },
+    { id: "Subcategory", label: "Subcategory", objectType: DynamicForm.SelectField, required: true, dropdownValues: [], controlParam: ["Category", "cascade_GetTransactionSubategories"] },
+    { id: "Name", label: "Client Name", objectType: DynamicForm.noField },
+    { id: "ClientID", label: "Client ID", objectType: DynamicForm.SelectField, required: true, dropdownValues: ["clients", "Name,' (',_id,')'", "_id"], hideInTable: true },
     { id: "Event", label: "Event", objectType: DynamicForm.noField },
-    { id: "EventID", label: "Event ID", objectType: DynamicForm.SelectField, required: true, dropdownValues: ["events", "Name,' (',_id,')'", "_id"], hideInTable: true },
+    { id: "EventID", label: "Event ID", objectType: DynamicForm.SelectField, required: true, dropdownValues: [], hideInTable: true, controlParam: ["ClientID", "cascade_GetClientEvents"] },
     { id: "Amount", label: "Amount", objectType: DynamicForm.TextField, required: true, inputType: DynamicForm.NumberType },
     { id: "Notes", label: "Notes", objectType: DynamicForm.TextField, required: true, inputType: DynamicForm.TextField },
 ];
@@ -80,6 +87,13 @@ export const getDynamicForm = (frmObj) => {
 const fillDropdownValues = (dropDownValObj) => {
     return new Promise((resolve, reject) => {
         axios.post(REST_API.link, { f: REST_API.methods.fetchField, collectionParam: dropDownValObj[0], textParam: dropDownValObj[1], valueParam: dropDownValObj[2] })
+            .then(resp => resolve(resp.data))
+            .catch(e => reject(e))
+    })
+}
+export const getCascadeDropdownValues = (key, param) => {
+    return new Promise((resolve, reject) => {
+        axios.post(REST_API.link, { f: REST_API.methods.readExtended, sqlKey: key, sqlConditions: param })
             .then(resp => resolve(resp.data))
             .catch(e => reject(e))
     })
