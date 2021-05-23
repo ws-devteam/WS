@@ -5,7 +5,7 @@ import {
 } from '@material-ui/core';
 import { Close } from '@material-ui/icons'
 import Skeleton from 'react-loading-skeleton'
-import { DynamicForm, CRUDModes, getFormattedDate } from './Config'
+import { DynamicForm, CRUDModes, getFormattedDate, getCascadeDropdownValues } from './Config'
 
 const DialogTransition = React.forwardRef(function Transition(props, ref) {
     return <Slide direction="up" ref={ref} {...props} />;
@@ -37,6 +37,19 @@ export default class FormDialog extends React.Component {
     handleChange(e, id) {
         let obj = this.state.dynamicStates
         obj[id] = e.target.value
+        let formFields = this.props.formFields
+        formFields.map(field => {
+            if (field.controlParam && field.controlParam[0] === id) {
+                let param = {}
+                param[id] = e.target.value
+                getCascadeDropdownValues(field.controlParam[1], param)
+                    .then(res => {
+                        field.dropdownValues = res
+                        this.generateDynamicForm()
+                    })
+            }
+            return null
+        })
         this.setState({
             dynamicStates: obj,
         }, this.generateDynamicForm)
