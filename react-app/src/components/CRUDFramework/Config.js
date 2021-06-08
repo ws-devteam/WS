@@ -34,7 +34,6 @@ export const Configure_Event = [
     { id: "ClientID", label: "Client ID", objectType: DynamicForm.SelectField, required: true, dropdownValues: ["clients", "Name,' (',_id,')'", "_id"], hideInTable: true },
     { id: "EventType", label: "Event Type", objectType: DynamicForm.SelectField, required: true, dropdownValues: [{ Text: "Wedding", Value: "Wedding" }, { Text: "Pre-Wedding", Value: "Pre-Wedding" }, { Text: "Rice Ceremony", Value: "Rice Ceremony" }] },
     { id: "Venue", label: "Venue", objectType: DynamicForm.TextField },
-    { id: "Contact", label: "Contact", objectType: DynamicForm.TextField },
     { id: "Notes", label: "Notes", objectType: DynamicForm.TextField },
     { id: "Status", label: "Status", objectType: DynamicForm.SelectField, required: true, dropdownValues: [{ Text: "Active", Value: "Active" }, { Text: "Inactive", Value: "Inactive" }] },
 ];

@@ -1,10 +1,10 @@
 import React from 'react';
 import {
     List, ListItem, ListItemAvatar, ListItemText, Grid, Box, Avatar, Typography, Card, CardActionArea, Collapse,
-    Tooltip, Button, ButtonGroup, CardContent
+    Tooltip, ButtonGroup, CardContent
 } from "@material-ui/core"
 import { green, red } from '@material-ui/core/colors'
-import { CallMade, CallReceived, Phone, AlternateEmail, LocationOnOutlined, PersonOutlineOutlined, FilterList } from '@material-ui/icons'
+import { CallMade, CallReceived, Phone, AlternateEmail, LocationOnOutlined, EventSeatOutlined, CloudDownloadOutlined } from '@material-ui/icons'
 import { REST_API, getFormattedDate, BlankResult, TransactionForm, getDynamicForm, generateUniqueKeys } from './CRUDFramework/Config'
 import FilterDialog from "./CRUDFramework/FilterDialog";
 import Skeleton from "react-loading-skeleton"
@@ -12,6 +12,7 @@ import 'react-date-range/dist/styles.css' // main css file
 import 'react-date-range/dist/theme/default.css' // theme css file
 import { DateRange } from 'react-date-range'
 import axios from 'axios'
+import { CSVLink } from "react-csv";
 
 export default class Reports extends React.Component {
     constructor() {
@@ -59,9 +60,9 @@ export default class Reports extends React.Component {
             .then(resp => {
                 let _income = 0, _expenditure = 0;
                 (resp.data).map(t => {
-                    if (t.TransactionType === "Income")
+                    if (t.Category === "Income")
                         _income += Number(t.Amount)
-                    else if (t.TransactionType === "Expenditure")
+                    else if (t.Category === "Expenditure")
                         _expenditure += Number(t.Amount)
                     return 1
                 })
@@ -137,8 +138,9 @@ export default class Reports extends React.Component {
 
                 <Box display="flex" justifyContent="flex-end" p={1} bgcolor="grey.200">
                     <ButtonGroup variant="text" color="primary">
-                        <Tooltip title="Filter">
-                            <Button onClick={() => this.setState({ openFilterDialog: !this.state.openFilterDialog })}><FilterList /></Button>
+                        <Tooltip title="Export">
+                            <CSVLink data={this.state.fetchedRows || []} filename={"Export.csv"}><CloudDownloadOutlined /></CSVLink>
+                            {/* <Button onClick={() => this.setState({ openFilterDialog: !this.state.openFilterDialog })}><FilterList /></Button> */}
                         </Tooltip>
                     </ButtonGroup>
                 </Box>
@@ -156,13 +158,13 @@ export default class Reports extends React.Component {
                                         <CardActionArea onClick={this.handleClick.bind(this, t._id)}>
                                             <ListItem alignItems="flex-start">
                                                 <ListItemAvatar>
-                                                    {t.TransactionType === "Income" && <Avatar style={{ backgroundColor: green[500] }}> <CallReceived /> </Avatar>}
-                                                    {t.TransactionType === "Expenditure" && <Avatar style={{ backgroundColor: red[500] }}> <CallMade /> </Avatar>}
+                                                    {t.Category === "Income" && <Avatar style={{ backgroundColor: green[500] }}> <CallReceived /> </Avatar>}
+                                                    {t.Category === "Expenditure" && <Avatar style={{ backgroundColor: red[500] }}> <CallMade /> </Avatar>}
                                                 </ListItemAvatar>
                                                 <ListItemText primary={
                                                     <React.Fragment>
                                                         {t.Name}
-                                                        <Typography component="span" variant="overline" color="textPrimary"> - {t.Event}</Typography>
+                                                        <Typography component="span" variant="overline" color="textPrimary"> - {t.Event} ({t.Subcategory})</Typography>
                                                     </React.Fragment>} secondary={
                                                         new Date(t.TransactionDate).toLocaleDateString('en-GB', {
                                                             year: 'numeric', month: 'short', day: 'numeric'
@@ -190,15 +192,15 @@ export default class Reports extends React.Component {
                                                             </Grid>
                                                         </Grid>
                                                         <Grid item sm>
-                                                            <Grid container direction="row" alignItems="center" spacing={2} aria-label="Location">
+                                                            <Grid container direction="row" alignItems="center" spacing={2} aria-label="Event Venue">
                                                                 <Grid item><LocationOnOutlined /></Grid>
-                                                                <Typography variant="subtitle2">{t.Location}</Typography>
+                                                                <Typography variant="subtitle2">{t.Venue}</Typography>
                                                             </Grid>
                                                         </Grid>
                                                         <Grid item sm>
-                                                            <Grid container direction="row" alignItems="center" spacing={2} aria-label="Status">
-                                                                <Grid item><PersonOutlineOutlined /></Grid>
-                                                                <Typography variant="subtitle2">{t.Status}</Typography>
+                                                            <Grid container direction="row" alignItems="center" spacing={2} aria-label="Event Type">
+                                                                <Grid item><EventSeatOutlined /></Grid>
+                                                                <Typography variant="subtitle2">{t.EventType}</Typography>
                                                             </Grid>
                                                         </Grid>
                                                         <Grid item sm={12}>
@@ -217,4 +219,4 @@ export default class Reports extends React.Component {
             </React.Fragment >
         );
     }
-} 
+}
